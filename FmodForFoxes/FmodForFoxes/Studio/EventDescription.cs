@@ -25,7 +25,7 @@ namespace FmodForFoxes.Studio
 		{
 			get
 			{
-				Native.getInstanceCount(out var instanceCount);
+				Native.getInstanceCount(out var instanceCount).ThrowIfNotOk();
 				return instanceCount;
 			}
 		}
@@ -37,7 +37,7 @@ namespace FmodForFoxes.Studio
 		{
 			get
 			{
-				Native.getInstanceList(out FMOD.Studio.EventInstance[] instanceArray);
+				Native.getInstanceList(out FMOD.Studio.EventInstance[] instanceArray).ThrowIfNotOk();
 				var returnArray = new EventInstance[instanceArray.Length];
 				for (var i = 0; i < instanceArray.Length; i += 1)
 				{
@@ -69,7 +69,7 @@ namespace FmodForFoxes.Studio
 		{
 			get
 			{
-				Native.is3D(out var is3D);
+				Native.is3D(out var is3D).ThrowIfNotOk();
 				return is3D;
 			}
 		}
@@ -89,7 +89,7 @@ namespace FmodForFoxes.Studio
 		{
 			get
 			{
-				Native.isOneshot(out var isOneshot);
+				Native.isOneshot(out var isOneshot).ThrowIfNotOk();
 				return isOneshot;
 			}
 		}
@@ -101,7 +101,7 @@ namespace FmodForFoxes.Studio
 		{
 			get
 			{
-				Native.isSnapshot(out var isSnapshot);
+				Native.isSnapshot(out var isSnapshot).ThrowIfNotOk();
 				return isSnapshot;
 			}
 		}
@@ -113,7 +113,7 @@ namespace FmodForFoxes.Studio
 		{
 			get
 			{
-				Native.isStream(out var isStream);
+				Native.isStream(out var isStream).ThrowIfNotOk();
 				return isStream;
 			}
 		}
@@ -125,7 +125,7 @@ namespace FmodForFoxes.Studio
 		{
 			get
 			{
-				Native.getParameterDescriptionCount(out var count);
+				Native.getParameterDescriptionCount(out var count).ThrowIfNotOk();
 				return count;
 			}
 		}
@@ -137,7 +137,7 @@ namespace FmodForFoxes.Studio
 		{
 			get
 			{
-				Native.getPath(out string path);
+				Native.getPath(out string path).ThrowIfNotOk();
 				return path;
 			}
 		}
@@ -149,7 +149,7 @@ namespace FmodForFoxes.Studio
 		{
 			get
 			{
-				Native.getID(out var id);
+				Native.getID(out var id).ThrowIfNotOk();
 				return id;
 			}
 		}
@@ -166,7 +166,7 @@ namespace FmodForFoxes.Studio
 		/// </summary>
 		public EventInstance CreateInstance()
 		{
-			Native.createInstance(out var eventInstance);
+			Native.createInstance(out var eventInstance).ThrowIfNotOk();
 			return new EventInstance(this, eventInstance);
 		}
 
@@ -174,14 +174,14 @@ namespace FmodForFoxes.Studio
 		/// Immediately stops and releases all instances of this event.
 		/// </summary>
 		public void ReleaseAllInstances() =>
-			Native.releaseAllInstances();
+			Native.releaseAllInstances().ThrowIfNotOk();
 
 		/// <summary>
 		/// Gets an event parameter description by its name.
 		/// </summary>
 		public FMOD.Studio.PARAMETER_DESCRIPTION GetParameterDescription(string name)
 		{
-			Native.getParameterDescriptionByName(name, out var parameter);
+			Native.getParameterDescriptionByName(name, out var parameter).ThrowIfNotOk();
 			return parameter;
 		}
 
@@ -190,7 +190,7 @@ namespace FmodForFoxes.Studio
 		/// </summary>
 		public FMOD.Studio.PARAMETER_DESCRIPTION GetParameterDescription(int index)
 		{
-			Native.getParameterDescriptionByIndex(index, out var parameter);
+			Native.getParameterDescriptionByIndex(index, out var parameter).ThrowIfNotOk();
 			return parameter;
 		}
 
@@ -199,7 +199,7 @@ namespace FmodForFoxes.Studio
 		/// </summary>
 		public FMOD.Studio.PARAMETER_DESCRIPTION GetParameterDescription(FMOD.Studio.PARAMETER_ID id)
 		{
-			Native.getParameterDescriptionByID(id, out var parameter);
+			Native.getParameterDescriptionByID(id, out var parameter).ThrowIfNotOk();
 			return parameter;
 		}
 
@@ -207,18 +207,18 @@ namespace FmodForFoxes.Studio
 		/// Assigns a user callback for every subsequent instance of this event.
 		/// </summary>
 		public void SetCallback(FMOD.Studio.EVENT_CALLBACK callback, FMOD.Studio.EVENT_CALLBACK_TYPE callbackMask) =>
-			Native.setCallback(callback, callbackMask);
+			Native.setCallback(callback, callbackMask).ThrowIfNotOk();
 
 		/// <summary>
 		/// Loads all non-streaming sounds for the event.
 		/// </summary>
 		public void LoadSampleData() => 
-			Native.loadSampleData();
+			Native.loadSampleData().ThrowIfNotOk();
 
 		/// <summary>
 		/// Unloads all non-streaming sounds for the event.
 		/// </summary>
 		public void UnloadSampleData() => 
-			Native.unloadSampleData();
+			Native.unloadSampleData().ThrowIfNotOk();
 	}
 }

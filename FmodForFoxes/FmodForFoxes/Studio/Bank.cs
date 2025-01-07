@@ -20,12 +20,12 @@ namespace FmodForFoxes.Studio
 		{
 			get
 			{
-				Native.getUserData(out IntPtr userData);
+				Native.getUserData(out IntPtr userData).ThrowIfNotOk();
 				return userData;
 			}
 
 			set =>
-				 Native.setUserData(value);
+				 Native.setUserData(value).ThrowIfNotOk();
 		}
 
 		public Bank(FMOD.Studio.Bank bank)
@@ -37,18 +37,18 @@ namespace FmodForFoxes.Studio
 		/// Loads all non-streaming sounds in the bank.
 		/// </summary>
 		public void LoadSampleData() => 
-			Native.loadSampleData();
+			Native.loadSampleData().ThrowIfNotOk();
 
 		/// <summary>
 		/// Unloads all non-streaming sounds in the bank.
 		/// </summary>
 		public void UnloadSampleData() => 
-			Native.unloadSampleData();
+			Native.unloadSampleData().ThrowIfNotOk();
 
 		/// <summary>
 		/// Unloads the bank, invalidating all related event descriptions and destroying associated instances.
 		/// </summary>
 		public void Unload() => 
-			Native.unload();
+			Native.unload().ThrowIfNotOk();
 	}
 }

@@ -1,4 +1,7 @@
-﻿using FmodForFoxes.Studio;
+﻿using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using FMOD;
+using FmodForFoxes.Studio;
 
 namespace FmodForFoxes
 {
@@ -55,22 +58,29 @@ namespace FmodForFoxes
 				// Not doing this results in Linux core system not working correctly.		
 				FMOD.Memory.GetStats(out var currentallocated, out var maxallocated);
 
-				FMOD.Studio.System.create(out StudioSystem.Native);
-				StudioSystem.Native.getCoreSystem(out CoreSystem.Native);
+				FMOD.Studio.System.create(out StudioSystem.Native).ThrowIfNotOk();
+				StudioSystem.Native.getCoreSystem(out CoreSystem.Native).ThrowIfNotOk();
+				
+				// Too high values will cause sound lag.
+				CoreSystem.Native.setDSPBufferSize(dspBufferLength, dspBufferCount).ThrowIfNotOk();
+				
 				preInitAction?.Invoke();
 
 				// This also will init core system. 
-				StudioSystem.Native.initialize(maxChannels, studioInitFlags, coreInitFlags, (IntPtr)0);
+				StudioSystem.Native.initialize(maxChannels, studioInitFlags, coreInitFlags, (IntPtr)0).ThrowIfNotOk();
 			}
 			else
 			{
-				FMOD.Factory.System_Create(out CoreSystem.Native);
+				FMOD.Factory.System_Create(out CoreSystem.Native).ThrowIfNotOk();
+				
+				// Too high values will cause sound lag.
+				CoreSystem.Native.setDSPBufferSize(dspBufferLength, dspBufferCount).ThrowIfNotOk();
+				
 				preInitAction?.Invoke();
-				CoreSystem.Native.init(maxChannels, coreInitFlags, (IntPtr)0);
+				CoreSystem.Native.init(maxChannels, coreInitFlags, (IntPtr)0).ThrowIfNotOk();
 			}
 
-			// Too high values will cause sound lag.
-			CoreSystem.Native.setDSPBufferSize(dspBufferLength, dspBufferCount);
+
 		}
 		public static void Update()
 		{
@@ -79,11 +89,11 @@ namespace FmodForFoxes
 			{
 				// Studio update updates core system internally.
 				// 2020 design awards winner material right here.
-				StudioSystem.Native.update();
+				StudioSystem.Native.update().ThrowIfNotOk();
 			}
 			else
 			{
-				CoreSystem.Native.update();
+				CoreSystem.Native.update().ThrowIfNotOk();
 			}
 		}
 
@@ -106,6 +116,14 @@ namespace FmodForFoxes
 			{
 				throw new Exception("You need to call Init() before calling this method!");
 			}
+		}
+		
+		internal static void ThrowIfNotOk(this RESULT result, [CallerArgumentExpression(nameof(result))] string callerLine = "")
+		{
+			#if DEBUG
+			if (result != RESULT.OK)
+				throw new FModException(result, callerLine);
+			#endif
 		}
 	}
 }
