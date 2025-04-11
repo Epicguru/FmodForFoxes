@@ -31,7 +31,7 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="nkast.Xna.Framework" Version="3.14.9001" PrivateAssets="all" />
+		<PackageReference Include="nkast.Xna.Framework" Version="4.1.9001" PrivateAssets="all" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\FmodForFoxes\FmodForFoxes.csproj" />
